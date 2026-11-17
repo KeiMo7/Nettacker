@@ -194,6 +194,7 @@ class DefaultSettings(ConfigBase):
     verbose_mode = False
     scan_compare_id = None
     compare_report_path_filename = ""
+    cyclonedx_report_path_filename = None
 
 
 class Config:

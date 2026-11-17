@@ -130,6 +130,13 @@ no_scan_to_compare: the scan_id to be compared not found
 compare_report_saved: "compare results saved in {0}"
 build_compare_report: "building compare report"
 finish_build_report: "Finished building compare report"
+cyclonedx_report_path_filename: save the scan results as a CycloneDX 1.5 JSON SBOM in the specified file
+build_cyclonedx_report: building CycloneDX 1.5 report ...
+finish_build_cyclonedx_report: finish building CycloneDX report!
+cyclonedx_report_saved: "CycloneDX report saved in {0}"
+cyclonedx_report_failed: "could not write CycloneDX report in {0}: {1}"
+cyclonedx_missing_metadata: "{0} component(s) with missing metadata degraded to 'unknown'"
+cyclonedx_invalid_component: "invalid CycloneDX component {0}: {1}"
 user_wordlist: "Allows users to enter their own wordlist"
 exclude_ports: "Ports to exclude (e.g. 80 || 80,443|| 1000-1300)"
 http_header: "Add custom HTTP headers to requests (format: 'key: value'). For multiple headers, use multiple -H flags"

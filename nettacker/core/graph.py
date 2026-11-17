@@ -11,6 +11,7 @@ import texttable
 
 from nettacker import all_module_severity_and_desc, logger
 from nettacker.config import Config, version_info
+from nettacker.core.cyclonedx import write_cyclonedx_report
 from nettacker.core.die import die_failure
 from nettacker.core.messages import messages as _
 from nettacker.core.utils.common import (
@@ -305,6 +306,10 @@ def create_report(options, scan_id):
     else:
         with Path(report_path_filename).open("w", encoding="utf-8") as report_file:
             report_file.write(build_text_table(all_scan_logs))
+
+    cyclonedx_report_path = getattr(options, "cyclonedx_report_path_filename", None)
+    if isinstance(cyclonedx_report_path, (str, Path)) and str(cyclonedx_report_path):
+        write_cyclonedx_report(all_scan_logs, cyclonedx_report_path)
 
     log.write(build_text_table(all_scan_logs))
     submit_report_to_db(

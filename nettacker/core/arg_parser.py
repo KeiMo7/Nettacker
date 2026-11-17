@@ -181,6 +181,13 @@ class ArgParser(ArgumentParser):
             help=_("available_graph").format(self.graphs),
         )
         engine_options.add_argument(
+            "--cyclonedx-output",
+            action="store",
+            default=Config.settings.cyclonedx_report_path_filename,
+            dest="cyclonedx_report_path_filename",
+            help=_("cyclonedx_report_path_filename"),
+        )
+        engine_options.add_argument(
             "-h",
             "--help",
             action="store_true",

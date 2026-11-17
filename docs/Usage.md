@@ -56,6 +56,8 @@ Engine:
                         save all logs in file (results.txt, results.csv, results.html, results.json, results.sarif, results.dd.json)
   --graph GRAPH_NAME    build a graph of all activities and information, you must use HTML output. available graphs:
                         ['d3_tree_v2_graph', 'd3_tree_v1_graph']
+  --cyclonedx-output CYCLONEDX_REPORT_PATH_FILENAME
+                        save the scan results as a CycloneDX 1.5 JSON SBOM in the specified file
   -h, --help            Show Nettacker Help Menu
 
 Target:
@@ -553,6 +555,40 @@ These output types will help with integration with different software and dashbo
 python nettacker.py -i 192.168.1.1/24 --profile information_gathering -o report.sarif
 python nettacker.py -i 192.168.1.1/24 --profile information_gathering -o report.json
 python nettacker.py -i 192.168.1.1/24 --profile information_gathering --output report.dd.json
+```
+
+## CycloneDX SBOM output
+
+In addition to the `-o`/`--output` report formats above, Nettacker can emit a
+[CycloneDX](https://cyclonedx.org/) 1.5 JSON SBOM of the components detected
+during the scan. It is opt-in and does not change the default report:
+
+```
+python nettacker.py -i 192.168.1.1/24 --profile information_gathering -o report.html --cyclonedx-output report.cdx.json
+```
+
+- Components are derived from the structured `json_event` payload of each
+  scan event (`name`, `version`, `type`, `namespace`, `purl_type`, `purl`,
+  `dependencies`). Missing metadata is degraded to `unknown` and counted in
+  `metadata.properties` instead of aborting the report.
+- Components are deduplicated by the `(name, version, purl)` triple, so the
+  same component in several versions stays listed per version, and a target
+  hit by several modules is expanded per module in the `dependencies` graph.
+- The output is deterministic (no timestamps), so two runs over the same
+  events produce byte-identical files.
+
+### Migrating existing integrations
+
+The new `cyclonedx_report_path_filename` setting defaults to `None`, which
+keeps the previous behaviour exactly. To enable the SBOM for an existing
+command line, add one flag:
+
+```
+# before
+python nettacker.py -i 192.168.1.1/24 --profile information_gathering -o report.html
+
+# after (report.html is unchanged, report.cdx.json is written additionally)
+python nettacker.py -i 192.168.1.1/24 --profile information_gathering -o report.html --cyclonedx-output report.cdx.json
 ```
 
 # API and WebUI
